@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>John AJ | Content Creator & Gospel Minister</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Styles & Animations */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #111827; /* Dark blue-gray background */
+            color: #E5E7EB;
+        }
+
+        h1, h2, h3, .font-montserrat {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* --- Hero Section Animation --- */
+        .hero-video-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            filter: brightness(0.4);
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 1s ease-out forwards;
+            opacity: 0;
+        }
+
+        .fade-in-up-delay-1 { animation-delay: 0.3s; }
+        .fade-in-up-delay-2 { animation-delay: 0.6s; }
+        .fade-in-up-delay-3 { animation-delay: 0.9s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* --- Section Scroll Animations --- */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Facebook Memories Slider --- */
+        .memories-slider-container {
+            perspective: 1000px;
+            position: relative;
+            width: 100%;
+            max-width: 400px; /* Control size on larger screens */
+            height: 500px;
+        }
+
+        .memory-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.2s;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background-color: #1F2937;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .memory-card.active {
+            transform: rotateY(0) scale(1);
+            opacity: 1;
+            z-index: 10;
+        }
+
+        .memory-card.next {
+            transform: translateX(50%) scale(0.8);
+            opacity: 0.5;
+            z-index: 5;
+        }
+        
+        .memory-card.prev {
+            transform: translateX(-50%) scale(0.8);
+            opacity: 0.5;
+            z-index: 5;
+        }
+        
+        .memory-card:not(.active):not(.next):not(.prev) {
+             transform: scale(0.7);
+             opacity: 0;
+        }
+
+        .memory-content {
+            width: 100%;
+            height: 100%;
+        }
+
+        .memory-content img, .memory-content video {
+            width: 100%;
+            height: 75%;
+            object-fit: cover;
+        }
+
+        .memory-caption {
+            padding: 1rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        }
+        
+        /* --- Button Styles --- */
+        .btn-primary {
+            background-color: #FFD700; /* Gold */
+            color: #111827;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: #007BFF; /* Blue */
+            color: #FFF;
+             transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 123, 255, 0.2);
+        }
+        
+        /* --- Glassmorphism Navbar --- */
+        nav {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Header Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#home" class="font-montserrat text-2xl font-black text-white tracking-wider">
+                John<span class="text-yellow-400">AJ</span> 🙏
+            </a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#about" class="text-gray-300 hover:text-yellow-400 transition">About</a>
+                <a href="#portfolio" class="text-gray-300 hover:text-yellow-400 transition">Work</a>
+                <a href="#ministry" class="text-gray-300 hover:text-yellow-400 transition">Ministry</a>
+                <a href="#contact" class="text-gray-300 hover:text-yellow-400 transition">Contact</a>
+            </div>
+             <button id="mobile-menu-button" class="md:hidden text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#about" class="block py-2 px-4 text-sm text-gray-300 hover:bg-gray-700">About</a>
+            <a href="#portfolio" class="block py-2 px-4 text-sm text-gray-300 hover:bg-gray-700">Work</a>
+            <a href="#ministry" class="block py-2 px-4 text-sm text-gray-300 hover:bg-gray-700">Ministry</a>
+            <a href="#contact" class="block py-2 px-4 text-sm text-gray-300 hover:bg-gray-700">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="h-screen w-screen relative flex items-center justify-center text-center text-white overflow-hidden">
+        <video autoplay muted loop class="hero-video-bg">
+             <!-- Using a placeholder video. Replace with an actual one. -->
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-man-singing-and-playing-the-guitar-in-a-field-4537-large.mp4" type="video/mp4">
+        </video>
+        <div class="z-10 px-4">
+            <h1 class="text-5xl md:text-8xl font-black uppercase tracking-wider fade-in-up font-montserrat">John AJ</h1>
+            <p class="text-xl md:text-3xl mt-4 text-yellow-300 fade-in-up fade-in-up-delay-1 font-montserrat">The Boy with Big God 🙏</p>
+            <p class="mt-6 max-w-2xl mx-auto text-gray-300 text-lg fade-in-up fade-in-up-delay-2">Content Creator & Gospel Minister dropping faith-filled vibes to uplift your day. Join the hustle with God on my side.</p>
+            <div class="mt-10 space-x-4 fade-in-up fade-in-up-delay-3">
+                <a href="https://www.facebook.com/john.adonis.7524/reels" target="_blank" class="btn-primary font-bold py-3 px-8 rounded-full text-lg inline-block">Watch Reels</a>
+                <a href="https://www.facebook.com/share/1DfgtkHqcM/" class="btn-secondary font-bold py-3 px-8 rounded-full text-lg inline-block">Message Me</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-20">
+
+        <!-- About Section -->
+        <section id="about" class="scroll-reveal my-20">
+            <div class="grid md:grid-cols-5 gap-12 items-center">
+                <div class="md:col-span-2">
+                     <!-- Replace with actual high-res photo -->
+                    <img src="profilepic.jpg" 
+                         onerror="this.onerror=null;this.src='https://placehold.co/400x500/1F2937/E5E7EB?text=John+AJ';"
+                         alt="John AJ" class="rounded-2xl shadow-2xl w-full h-auto object-cover transform transition duration-500 hover:scale-105">
+                </div>
+                <div class="md:col-span-3">
+                    <h2 class="text-4xl font-bold mb-4 text-yellow-400">About Me</h2>
+                    <p class="text-lg text-gray-300 mb-6">A passionate Nigerian content creator and gospel minister, known as 'The Boy with Big God.' With over 5.4K followers, I blend faith, creativity, and hustle to inspire souls.</p>
+                    <div class="border-l-4 border-pink-500 pl-4 italic text-xl my-8">
+                        "Hustle make mum/Dad proud 💕 – Because faith + grind = unstoppable."
+                    </div>
+                    <p class="text-gray-400">Driven by this mission, I share uplifting stories, worship moments, and digital vibes that connect communities. From heartfelt reels to soul-stirring ministry, my goal is to spread positivity and the love of God. Welcome to my journey!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="scroll-reveal my-20 text-center">
+            <h2 class="text-4xl font-bold mb-4 text-yellow-400">My Work</h2>
+            <p class="text-lg text-gray-300 mb-12 max-w-3xl mx-auto">A glimpse into my creative world. Here are some moments and memories, just like scrolling through Facebook.</p>
+
+            <div class="flex flex-col items-center">
+                <div class="memories-slider-container">
+                    <!-- Slider items will be injected here by JS -->
+                </div>
+                <div class="mt-8 flex space-x-4">
+                    <button id="prevBtn" class="bg-gray-700 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-full transition-colors">
+                        &larr;
+                    </button>
+                    <button id="nextBtn" class="bg-gray-700 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-full transition-colors">
+                        &rarr;
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="scroll-reveal my-20 text-center">
+            <h2 class="text-4xl font-bold mb-4 text-yellow-400">Get In Touch</h2>
+            <p class="text-lg text-gray-300 mb-12 max-w-3xl mx-auto">Have a question, a prayer request, Send a message!</p>
+             <p>+2348144341540</p>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-800">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
+            <p>&copy; 2025 John AJ. All Rights Reserved.</p>
+            <p class="text-sm mt-2">The Boy with Big God 🙏</p>
+             <div class="mt-4 flex justify-center space-x-6">
+                <a href="https://www.facebook.com/john.adonis.7524" target="_blank" class="hover:text-yellow-400 transition">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg>
+                </a>
+                <!-- Add other social links here if available -->
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // --- Navbar transparency on scroll ---
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('py-2');
+                navbar.classList.remove('py-4');
+            } else {
+                navbar.classList.add('py-4');
+                navbar.classList.remove('py-2');
+            }
+        });
+
+        // --- Smooth Scrolling for anchor links ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                mobileMenu.classList.add('hidden'); // Close mobile menu on click
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // --- Scroll Reveal Animation ---
+        const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        scrollRevealElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // --- Facebook Memories Slider ---
+        const sliderContainer = document.querySelector('.memories-slider-container');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+
+        const memories = [
+            {
+                type: 'img',
+                src: 'profilepic.jpg',
+                fallback: 'https://placehold.co/400x500/007BFF/FFFFFF?text=Memory+1',
+                caption: 'them Carry my amshaw ooooooo @highlight #Projecttangale',
+                date: 'October 1, 2025'
+            },
+            {
+                type: 'video',
+                src: 'https://assets.mixkit.co/videos/preview/mixkit-a-man-playing-a-song-on-the-guitar-4499-large.mp4',
+                fallback: null,
+                caption: 'Dropping some new sounds. The spirit moves in mysterious ways. #ContentCreator',
+                date: 'September 22, 2025'
+            },
+            {
+                type: 'image',
+                src: 'https://scontent.flos5-1.fna.fbcdn.net/v/t39.30808-6/435165842_122104595286211158_1638362615457193231_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeEqG7QzL6eY3d9fWpY8e3b-d3R288b-q793dHbzxv6rv6-rBf9i3yF-881r7oM6qN0WpP7_U72-Nns-hT71d5rV&_nc_ohc=v12140zE-e4Q7kNvgF-uK3e&_nc_zt=23&_nc_ht=scontent.flos5-1.fna&oh=00_AYDo8n-y7R9Fk3_L3oG5I_c2-eJ0p88c0qI-M02tQ4c_5Q&oe=6643033F',
+                fallback: 'https://placehold.co/400x500/FF69B4/FFFFFF?text=Memory+3',
+                caption: 'Community and faith. Blessed to share this journey with amazing people. #TheBoyWithBigGod',
+                date: 'August 15, 2025'
+            },
+            {
+                type: 'image',
+                src: 'https://scontent.flos5-1.fna.fbcdn.net/v/t39.30808-6/429676757_122100411314211158_3593060696950392398_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeFNyJk8y2R1T_x8n8vQ-1KjR2W82I-lJcdHZbzYj6Ulx8-i2T_3yI-uV1d36g8gJ_9Uv9fU_D28rS4e0w8v03xG&_nc_ohc=3b1u-DqN1B0Q7kNvgFgGqLh&_nc_zt=23&_nc_ht=scontent.flos5-1.fna&oh=00_AYBq2eU1v68qV2e5n-Kq5Pz5q4i1W7_K1uB1wXpP56m38g&oe=66432098',
+                fallback: 'https://placehold.co/400x500/FFD700/000000?text=Memory+4',
+                caption: 'Hustle mode: ON. Creating content that makes Mum & Dad proud. 💕',
+                date: 'July 29, 2025'
+            }
+        ];
+
+        let currentIndex = 0;
+
+        function createSlider() {
+            sliderContainer.innerHTML = '';
+            memories.forEach((memory, index) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.dataset.index = index;
+
+                let mediaElement;
+                if (memory.type === 'image') {
+                    mediaElement = `<img src="${memory.src}" onerror="this.onerror=null;this.src='${memory.fallback}';" alt="Memory ${index + 1}">`;
+                } else {
+                    mediaElement = `<video muted loop playsinline><source src="${memory.src}" type="video/mp4"></video>`;
+                }
+
+                card.innerHTML = `
+                    <div class="memory-content">
+                        ${mediaElement}
+                        <div class="absolute bottom-0 left-0 right-0 p-4 text-left bg-gradient-to-t from-black via-black/70 to-transparent">
+                            <p class="text-sm text-gray-300 font-bold">${memory.date}</p>
+                            <p class="text-white mt-1">${memory.caption}</p>
+                        </div>
+                    </div>
+                `;
+                sliderContainer.appendChild(card);
+            });
+            updateSlider();
+        }
+
+        function updateSlider() {
+            const cards = document.querySelectorAll('.memory-card');
+            cards.forEach((card, index) => {
+                card.classList.remove('active', 'prev', 'next');
+                const video = card.querySelector('video');
+
+                if (index === currentIndex) {
+                    card.classList.add('active');
+                    if(video) video.play();
+                } else if (index === (currentIndex + 1) % memories.length) {
+                    card.classList.add('next');
+                    if(video) video.pause();
+                } else if (index === (currentIndex - 1 + memories.length) % memories.length) {
+                    card.classList.add('prev');
+                    if(video) video.pause();
+                } else {
+                    if(video) video.pause();
+                }
+            });
+        }
+        
+        function showNext() {
+            currentIndex = (currentIndex + 1) % memories.length;
+            updateSlider();
+        }
+
+        function showPrev() {
+            currentIndex = (currentIndex - 1 + memories.length) % memories.length;
+            updateSlider();
+        }
+
+        nextBtn.addEventListener('click', showNext);
+        prevBtn.addEventListener('click', showPrev);
+
+        // Auto-play slider
+        setInterval(showNext, 5000); // Change memory every 5 seconds
+
+        createSlider();
+
+        // --- Contact Form ---
+        const contactForm = document.getElementById('contactForm');
+        const formMessage = document.getElementById('form-message');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            formMessage.textContent = 'Thank you! Your message has been sent.';
+            formMessage.style.color = '#34D399'; // Green color for success
+            contactForm.reset();
+            setTimeout(() => {
+                formMessage.textContent = '';
+            }, 5000);
+        });
+    });
+    </script>
+</body>
+</html>
